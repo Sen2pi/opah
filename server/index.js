@@ -2,8 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const publicacoesRoutes = require('./routes/publicacoes'); // Certifique-se de que você tenha esse arquivo
-
+const allRoutes = require('./routes/allRoutes')
 const app = express();
 
 // Middlewares
@@ -13,7 +12,8 @@ app.use(express.json());
 
 // Rotas
 app.use('/auth', authRoutes); // Rotas de autenticação
-app.use('/publicacoes', publicacoesRoutes); // Rotas de publicações
+app.use('/api', allRoutes); // Rotas de De todos recursos 
+
 
 const PORT = 5000;
 app.listen(PORT, () => {
