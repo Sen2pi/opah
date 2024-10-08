@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
-const allRoutes = require('./routes/allRoutes')
+const allRoutes = require('./routes/allRoutes');
 const app = express();
 
 // Middlewares
@@ -12,7 +12,7 @@ app.use(express.json());
 
 // Rotas
 app.use('/auth', authRoutes); // Rotas de autenticação
-app.use('/api', allRoutes); // Rotas de De todos recursos 
+app.use('/api', allRoutes ); // Rotas de De todos recursos 
 
 
 const PORT = 5000;

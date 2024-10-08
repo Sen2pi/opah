@@ -1,7 +1,7 @@
 const { executeWithRetry } = require("../config/utilsDb");
 
 // Obter todas as aulas
-exports.getAulas = (req, res) => {
+const getAulas = (req, res) => {
   const sql = "SELECT * FROM Aulas";
   executeWithRetry(sql, [])
     .then(results => res.json(results))
@@ -9,7 +9,7 @@ exports.getAulas = (req, res) => {
 };
 
 // Obter aula por ID
-exports.getAulaById = (req, res) => {
+const getAulaById = (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM Aulas WHERE id = ?";
   executeWithRetry(sql, [id])
@@ -24,7 +24,7 @@ exports.getAulaById = (req, res) => {
 };
 
 // Criar nova aula
-exports.createAula = (req, res) => {
+const createAula = (req, res) => {
   const { Tema, DataHora, Descricao, ModuloId, ProfessorId } = req.body;
   const sql = "INSERT INTO Aulas (Tema, DataHora, Descricao, ModuloId, ProfessorId) VALUES (?, ?, ?, ?, ?)";
   executeWithRetry(sql, [Tema, DataHora, Descricao, ModuloId, ProfessorId])
@@ -33,7 +33,7 @@ exports.createAula = (req, res) => {
 };
 
 // Atualizar aula
-exports.updateAula = (req, res) => {
+const updateAula = (req, res) => {
   const { id } = req.params;
   const { Tema, DataHora, Descricao, ModuloId, ProfessorId } = req.body;
   const sql = "UPDATE Aulas SET Tema = ?, DataHora = ?, Descricao = ?, ModuloId = ?, ProfessorId = ? WHERE id = ?";
@@ -43,7 +43,7 @@ exports.updateAula = (req, res) => {
 };
 
 // Deletar aula
-exports.deleteAula = (req, res) => {
+const deleteAula = (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM Aulas WHERE id = ?";
   executeWithRetry(sql, [id])
@@ -52,7 +52,7 @@ exports.deleteAula = (req, res) => {
 };
 
 // Obter aulas futuras (DataHora > agora + 1 hora)
-exports.getAulasFuturas = (req, res) => {
+const getAulasFuturas = (req, res) => {
   const sql = "SELECT * FROM Aulas WHERE DataHora > NOW() + INTERVAL 1 HOUR";
   executeWithRetry(sql, [])
     .then(results => {
@@ -66,4 +66,13 @@ exports.getAulasFuturas = (req, res) => {
       console.error('Erro ao buscar aulas futuras:', err);
       res.status(500).json({ message: "Erro ao buscar aulas futuras" });
     });
+};
+module.exports = {
+  getAulasFuturas,
+  deleteAula,
+  updateAula,
+  createAula,
+  getAulaById,
+  getAulas
+  // outras funções do controlador...
 };

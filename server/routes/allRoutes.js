@@ -10,8 +10,9 @@ const consentimentosController = require("../controllers/consentimentosControlle
 const usuariosController = require("../controllers/usuariosController");
 const aulasController = require("../controllers/aulasController");
 const professoresController = require("../controllers/professoresController");
-const publicacoesController = require("../controllers/publicacoesController");
 const alunosController = require("../controllers/alunosController");
+const publicacoesController = require("../controllers/publicacoesController");
+
 
 // Rotas para Faturas
 router.get("/faturas", faturasController.getFaturas);
@@ -21,7 +22,7 @@ router.put("/faturas/:id", faturasController.updateFatura);
 router.delete("/faturas/:id", faturasController.deleteFatura);
 
 // Rotas para Balancete
-router.get("/balancete", balanceteController.getBalancete);
+router.get("/balancete", balanceteController.getBalancetes);
 router.get("/balancete/:id", balanceteController.getBalanceteById);
 router.post("/balancete", balanceteController.createBalancete);
 router.put("/balancete/:id", balanceteController.updateBalancete);
@@ -70,6 +71,13 @@ router.post("/professores", professoresController.createProfessor);
 router.put("/professores/:id", professoresController.updateProfessor);
 router.delete("/professores/:id", professoresController.deleteProfessor);
 
+// Rotas para Alunos
+router.get("/alunos", alunosController.getAlunos);
+router.get("/alunos/:id", alunosController.getAlunoById);
+router.post("/alunos", alunosController.createAluno);
+router.put("/alunos/:id", alunosController.updateAluno);
+router.delete("/alunos/:id", alunosController.deleteAluno);
+
 // Rotas para Publicações
 router.get("/publicacoes", publicacoesController.getPublicacoes);
 router.get("/publicacoes/:id", publicacoesController.getPublicacaoById);
@@ -77,13 +85,6 @@ router.post("/publicacoes", publicacoesController.createPublicacao);
 router.put("/publicacoes/:id", publicacoesController.updatePublicacao);
 router.delete("/publicacoes/:id", publicacoesController.deletePublicacao);
 // Rota para obter as últimas publicações
-router.get('/publicacoes/ultimas', publicacoesController.getUltimasPublicacoes);
-
-// Rotas para Alunos
-router.get("/alunos", alunosController.getAlunos);
-router.get("/alunos/:id", alunosController.getAlunoById);
-router.post("/alunos", alunosController.createAluno);
-router.put("/alunos/:id", alunosController.updateAluno);
-router.delete("/alunos/:id", alunosController.deleteAluno);
+router.get('/ultimas', publicacoesController.getUltimasPublicacoes);
 
 module.exports = router;

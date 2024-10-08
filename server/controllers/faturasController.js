@@ -1,13 +1,13 @@
 const { executeWithRetry } = require("../config/utilsDb");
 
-exports.getFaturas = (req, res) => {
+const getFaturas = (req, res) => {
   const sql = "SELECT * FROM Faturas";
   executeWithRetry(sql, [])
     .then(results => res.json(results))
     .catch(err => res.status(500).send(err));
 };
 
-exports.getFaturaById = (req, res) => {
+const getFaturaById = (req, res) => {
   const { id } = req.params;
   const sql = "SELECT * FROM Faturas WHERE id = ?";
   executeWithRetry(sql, [id])
@@ -15,27 +15,35 @@ exports.getFaturaById = (req, res) => {
     .catch(err => res.status(500).send(err));
 };
 
-exports.createFatura = (req, res) => {
-  const { Numero, DataEmissao, ValorTotal, UsuarioId, Descricao } = req.body;
-  const sql = "INSERT INTO Faturas (Numero, DataEmissao, ValorTotal, UsuarioId, Descricao) VALUES (?, ?, ?, ?, ?)";
-  executeWithRetry(sql, [Numero, DataEmissao, ValorTotal, UsuarioId, Descricao])
+const createFatura = (req, res) => {
+  const { NumeroFatura, NifVendedor, Descricao, DataHora, Valor } = req.body;
+  const sql = "INSERT INTO Faturas (NumeroFatura, NifVendedor, Descricao, DataHora, Valor) VALUES (?, ?, ?, ?, ?)";
+  executeWithRetry(sql, [NumeroFatura, NifVendedor, Descricao, DataHora, Valor])
     .then(result => res.json({ id: result.insertId }))
     .catch(err => res.status(500).send(err));
 };
 
-exports.updateFatura = (req, res) => {
+const updateFatura = (req, res) => {
   const { id } = req.params;
-  const { Numero, DataEmissao, ValorTotal, UsuarioId, Descricao } = req.body;
-  const sql = "UPDATE Faturas SET Numero = ?, DataEmissao = ?, ValorTotal = ?, UsuarioId = ?, Descricao = ? WHERE id = ?";
-  executeWithRetry(sql, [Numero, DataEmissao, ValorTotal, UsuarioId, Descricao, id])
+  const { NumeroFatura, NifVendedor, Descricao, DataHora, Valor} = req.body;
+  const sql = "UPDATE Faturas SET NumeroFatura=?, NifVendedor=?, Descricao=?, DataHora=?, Valor=? WHERE id = ?";
+  executeWithRetry(sql, [NumeroFatura, NifVendedor, Descricao, DataHora, Valor, id])
     .then(() => res.json({ message: "Fatura atualizada com sucesso" }))
     .catch(err => res.status(500).send(err));
 };
 
-exports.deleteFatura = (req, res) => {
+const deleteFatura = (req, res) => {
   const { id } = req.params;
   const sql = "DELETE FROM Faturas WHERE id = ?";
   executeWithRetry(sql, [id])
     .then(() => res.json({ message: "Fatura deletada com sucesso" }))
     .catch(err => res.status(500).send(err));
+};
+module.exports = {
+  getFaturas,
+  getFaturaById,
+  deleteFatura,
+  updateFatura,
+  createFatura
+  // outras funções do controlador...
 };
