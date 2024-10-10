@@ -4,8 +4,8 @@ const { executeWithRetry } = require("../config/utilsDb");
 const getUltimasPublicacoes = (req, res) => {
   const sql = "SELECT * FROM Publicacoes ORDER BY DataHora DESC LIMIT 10";
   executeWithRetry(sql, [])
-  .then((results) => res.json(results))
-  .catch((err) => res.status(500).send(err));
+    .then((results) => res.json(results))
+    .catch((err) => res.status(500).send(err));
 };
 
 const getPublicacoes = (req, res) => {
@@ -27,17 +27,41 @@ const createPublicacao = (req, res) => {
   const { Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto } = req.body;
   const sql =
     "INSERT INTO Publicacoes (Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto) VALUES (?, ?, ?, ?,?,?)";
-  executeWithRetry(sql, [Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto])
+  executeWithRetry(sql, [
+    Titulo,
+    FotoOuVideo,
+    Conteudo,
+    DataHora,
+    Local,
+    Contacto,
+  ])
     .then((result) => res.json({ id: result.insertId }))
     .catch((err) => res.status(500).send(err));
 };
 
 const updatePublicacao = (req, res) => {
   const { id } = req.params;
-  const { Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto} = req.body;
-  const sql =
-    "UPDATE Publicacoes SET Titulo=?, FotoOuVideo=?, Conteudo=?, DataHora=?, Local=?, Contacto=? WHERE id = ?";
-  executeWithRetry(sql, [Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto, id])
+  const { Titulo, FotoOuVideo, Conteudo, DataHora, Local, Contacto } = req.body;
+  const sql = `
+  UPDATE Publicacoes 
+  SET 
+    Titulo = COALESCE(?, Titulo), 
+    FotoOuVideo = COALESCE(?, FotoOuVideo), 
+    Conteudo = COALESCE(?, Conteudo), 
+    DataHora = COALESCE(?, DataHora), 
+    Local = COALESCE(?, Local), 
+    Contacto = COALESCE(?, Contacto) 
+  WHERE id = ?`;
+
+  executeWithRetry(sql, [
+    Titulo,
+    FotoOuVideo,
+    Conteudo,
+    DataHora,
+    Local,
+    Contacto,
+    id,
+  ])
     .then(() => res.json({ message: "Publicação atualizada com sucesso" }))
     .catch((err) => res.status(500).send(err));
 };
@@ -55,6 +79,6 @@ module.exports = {
   createPublicacao,
   getUltimasPublicacoes,
   deletePublicacao,
-  updatePublicacao
+  updatePublicacao,
   // outras funções do controlador...
 };

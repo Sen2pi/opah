@@ -16,18 +16,32 @@ const getUsuarioById = (req, res) => {
 };
 
 const createUsuario = (req, res) => {
-  const { Nome, Sobrenome, NIF, Email,Endereco, Cidade, NSS, TipoUtilizador, Password } = req.body;
-  const sql = "INSERT INTO Usuarios (Nome, Sobrenome, NIF, Email,Endereco, Cidade, NSS, TipoUtilizador, Password) VALUES (?, ?, ?, ?, ?,?,?,?,?)";
-  executeWithRetry(sql, [Nome, Sobrenome, NIF, Email,Endereco, Cidade, NSS, TipoUtilizador, Password])
+  const { Nome, Sobrenome, NIF, Telefone,  Email , Endereco, Cidade, NSS, TipoUtilizador, Password } = req.body;
+  const sql = "INSERT INTO Usuarios (Nome, Sobrenome, NIF, Telefone , Email , Endereco , Cidade, NSS, TipoUtilizador, Password) VALUES (?, ?, ?, ?, ?,?,?,?,?,?)";
+  executeWithRetry(sql, [Nome, Sobrenome, NIF,Telefone, Email,Endereco, Cidade, NSS, TipoUtilizador, Password])
     .then(result => res.json({ id: result.insertId }))
     .catch(err => res.status(500).send(err));
 };
 
 const updateUsuario = (req, res) => {
   const { id } = req.params;
-  const { Nome, Sobrenome, NIF, Email,Endereco, Cidade, NSS, TipoUtilizador, Password } = req.body;
-  const sql = "UPDATE Usuarios SET Nome=?, Sobrenome=?, NIF=?, Email=?,Endereco=?, Cidade=?, NSS=?, TipoUtilizador=?, Password=? WHERE id = ?";
-  executeWithRetry(sql, [Nome, Sobrenome, NIF, Email,Endereco, Cidade, NSS, TipoUtilizador, Password, id])
+  const { Nome, Sobrenome, NIF, Telefone,Email,Endereco, Cidade, NSS, TipoUtilizador, Password } = req.body;
+  const sql = `
+  UPDATE Usuarios 
+  SET 
+    Nome = COALESCE(?, Nome), 
+    Sobrenome = COALESCE(?, Sobrenome), 
+    NIF = COALESCE(?, NIF), 
+    Telefone = COALESCE(?, Telefone), 
+    Email = COALESCE(?, Email), 
+    Endereco = COALESCE(?, Endereco), 
+    Cidade = COALESCE(?, Cidade), 
+    NSS = COALESCE(?, NSS), 
+    TipoUtilizador = COALESCE(?, TipoUtilizador), 
+    Password = COALESCE(?, Password) 
+  WHERE id = ?`;
+
+  executeWithRetry(sql, [Nome, Sobrenome, NIF,Telefone, Email,Endereco, Cidade, NSS, TipoUtilizador, Password, id])
     .then(() => res.json({ message: "Usuario atualizado com sucesso" }))
     .catch(err => res.status(500).send(err));
 };

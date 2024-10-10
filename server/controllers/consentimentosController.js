@@ -16,18 +16,25 @@ const getConsentimentoById = (req, res) => {
 };
 
 const createConsentimento = (req, res) => {
-  const {AlunoId, ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados } = req.body;
-  const sql = "INSERT INTO Consentimentos ( AlunoId, ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados) VALUES (?, ?, ?, ?)";
-  executeWithRetry(sql, [AlunoId, ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados])
+  const { ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados } = req.body;
+  const sql = "INSERT INTO Consentimentos (  ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados) VALUES ( ?, ?, ?)";
+  executeWithRetry(sql, [ ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados])
     .then(result => res.json({ id: result.insertId }))
     .catch(err => res.status(500).send(err));
 };
 
 const updateConsentimento = (req, res) => {
   const { id } = req.params;
-  const {  AlunoId, ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados } = req.body;
-  const sql = "UPDATE Consentimentos SET AlunoId = ?, ConsentimentoImagem = ?, ConsentimentoEducativo = ?, ConsentimentoDados = ? WHERE id = ?";
-  executeWithRetry(sql, [ AlunoId, ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados, id])
+  const {   ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados } = req.body;
+  const sql = `
+  UPDATE Consentimentos 
+  SET 
+    ConsentimentoImagem = COALESCE(?, ConsentimentoImagem), 
+    ConsentimentoEducativo = COALESCE(?, ConsentimentoEducativo), 
+    ConsentimentoDados = COALESCE(?, ConsentimentoDados) 
+  WHERE id = ?`;
+
+  executeWithRetry(sql, [  ConsentimentoImagem, ConsentimentoEducativo, ConsentimentoDados, id])
     .then(() => res.json({ message: "Consentimento atualizado com sucesso" }))
     .catch(err => res.status(500).send(err));
 };

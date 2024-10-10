@@ -62,7 +62,7 @@ router.get("/aulas/:id", aulasController.getAulaById);
 router.post("/aulas", aulasController.createAula);
 router.put("/aulas/:id", aulasController.updateAula);
 router.delete("/aulas/:id", aulasController.deleteAula);
-router.get("/aulas/futuras", aulasController.getAulasFuturas);
+router.get("/futuras", aulasController.getAulasFuturas);
 
 // Rotas para Professores
 router.get("/professores", professoresController.getProfessores);

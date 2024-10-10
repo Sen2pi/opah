@@ -16,18 +16,27 @@ const getRelatorioById = (req, res) => {
 };
 
 const createRelatorio = (req, res) => {
-  const { ModuloId, NumeroParticipante, DataInicio, DataFim, Descricao } = req.body;
-  const sql = "INSERT INTO Relatorios (ModuloId, NumeroParticipante, DataInicio, DataFim, Descricao) VALUES (?, ?, ?, ?, ?)";
-  executeWithRetry(sql, [ModuloId, NumeroParticipante, DataInicio, DataFim, Descricao])
+  const { ModuloId, NumeroParticipantes, DataInicio, DataFim, Descricao } = req.body;
+  const sql = "INSERT INTO Relatorios (ModuloId, NumeroParticipantes, DataInicio, DataFim, Descricao) VALUES (?, ?, ?, ?, ?)";
+  executeWithRetry(sql, [ModuloId, NumeroParticipantes, DataInicio, DataFim, Descricao])
     .then(result => res.json({ id: result.insertId }))
     .catch(err => res.status(500).send(err));
 };
 
 const updateRelatorio = (req, res) => {
   const { id } = req.params;
-  const { ModuloId, NumeroParticipante, DataInicio, DataFim, Descricao } = req.body;
-  const sql = "UPDATE Relatorios SET ModuloId = ?, NumeroParticipante = ?, DataInicio = ?, DataFim = ?, Descricao = ? WHERE id = ?";
-  executeWithRetry(sql, [ModuloId, NumeroParticipante, DataInicio, DataFim, Descricao, id])
+  const { ModuloId, NumeroParticipantes, DataInicio, DataFim, Descricao } = req.body;
+  const sql = `
+  UPDATE Relatorios 
+  SET 
+    ModuloId = COALESCE(?, ModuloId), 
+    NumeroParticipantes = COALESCE(?, NumeroParticipantes), 
+    DataInicio = COALESCE(?, DataInicio), 
+    DataFim = COALESCE(?, DataFim), 
+    Descricao = COALESCE(?, Descricao) 
+  WHERE id = ?`;
+
+  executeWithRetry(sql, [ModuloId, NumeroParticipantes, DataInicio, DataFim, Descricao, id])
     .then(() => res.json({ message: "Relatório atualizado com sucesso" }))
     .catch(err => res.status(500).send(err));
 };
