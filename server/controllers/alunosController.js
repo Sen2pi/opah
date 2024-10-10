@@ -106,7 +106,8 @@ const updateAluno = (req, res) => {
     GrauParentescoEncEdu = COALESCE(?, GrauParentescoEncEdu), 
     Escola = COALESCE(?, Escola), 
     DoencasCronicas = COALESCE(?, DoencasCronicas), 
-    ConhecimentoPrograma = COALESCE(?, ConhecimentoPrograma) 
+    ConhecimentoPrograma = COALESCE(?, ConhecimentoPrograma) ,
+    IdParaConsentimentos = COALESCE(?,IdParaConsentimentos)
   WHERE id = ?`;
   executeWithRetry(sql, [
     Nome,
