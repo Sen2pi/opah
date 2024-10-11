@@ -27,6 +27,7 @@ router.get("/balancete/:id", balanceteController.getBalanceteById);
 router.post("/balancete", balanceteController.createBalancete);
 router.put("/balancete/:id", balanceteController.updateBalancete);
 router.delete("/balancete/:id", balanceteController.deleteBalancete);
+router.get("/balancete/calculo/:year/:month", balanceteController.getBalanceteCalculations);
 
 // Rotas para Módulos
 router.get("/modulos", modulosController.getModulos);
