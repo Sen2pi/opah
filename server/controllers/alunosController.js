@@ -106,7 +106,7 @@ const updateAluno = (req, res) => {
     GrauParentescoEncEdu = COALESCE(?, GrauParentescoEncEdu), 
     Escola = COALESCE(?, Escola), 
     DoencasCronicas = COALESCE(?, DoencasCronicas), 
-    ConhecimentoPrograma = COALESCE(?, ConhecimentoPrograma) ,
+    ConhecimentoPrograma = COALESCE(?, ConhecimentoPrograma),
     IdParaConsentimentos = COALESCE(?,IdParaConsentimentos)
   WHERE id = ?`;
   executeWithRetry(sql, [
@@ -142,7 +142,20 @@ const deleteAluno = (req, res) => {
     .then(() => res.json({ message: "Aluno deletado com sucesso" }))
     .catch((err) => res.status(500).send(err));
 };
+
+const getAlunosByAulaId = (req, res) => {
+  const { id } = req.params; // Ensure you use `id` here
+  const sql = `SELECT * FROM Alunos WHERE AulaId = ?`;
+  executeWithRetry(sql, [id]) // Pass `id` instead of `UsuarioId`
+    .then((results) => res.json(results))
+    .catch((err) => {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Erro ao buscar alunos", error: err });
+    });
+};
+
 module.exports = {
+  getAlunosByAulaId,
   deleteAluno,
   updateAluno,
   createAluno,

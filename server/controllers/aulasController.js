@@ -114,6 +114,29 @@ const getAulasFuturas = (req, res) => {
       res.status(500).json({ message: "Erro ao buscar aulas futuras" });
     });
 };
+const getAulasByProfessorId = (req, res) => {
+  const { id } = req.params;
+  const sql = `
+    SELECT Aulas.* 
+    FROM Aulas 
+    INNER JOIN Professores ON Aulas.ProfessorId = Professores.id
+    WHERE Professores.UsuarioId = ?`;
+
+  executeWithRetry(sql, [id])
+    .then((results) => res.json(results))
+    .catch((err) => res.status(500).send(err));
+};
+
+const getAulasByModuloId = (req, res) => {
+  const { id } = req.params; 
+  const sql = `SELECT * FROM Aulas WHERE ModuloId = ?`;
+  executeWithRetry(sql, [id]) 
+    .then((results) => res.json(results))
+    .catch((err) => {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Erro ao buscar módulos", error: err });
+    });
+};
 
 module.exports = {
   getAulasFuturas,
@@ -122,4 +145,6 @@ module.exports = {
   createAula,
   getAulaById,
   getAulas,
+  getAulasByProfessorId,  // Export function to get aulas by professor
+  getAulasByModuloId,  // Export function to get aulas by modulo
 };

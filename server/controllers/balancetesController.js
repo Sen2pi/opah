@@ -30,7 +30,7 @@ const updateBalancete = (req, res) => {
   const sql = `
   UPDATE Balancete 
   SET 
-    DataHora = NOW(), 
+    DataHora = COALESCE(?,DataHora), 
     Montante = COALESCE(?, Montante), 
     EntradaSaida = COALESCE(?, EntradaSaida), 
     FaturaId = COALESCE(?, FaturaId) 

@@ -56,7 +56,7 @@ router.post('/login',
       );
 
       // Retorna o token e o tipo de utilizador
-      res.json({ token, userType: results[0].TipoUtilizador }); // Enviar o tipo de utilizador
+      res.json({ token, userType: results[0].TipoUtilizador, userId: results[0].id }); // Enviar o tipo de utilizador e o userId
     });
   }
 );

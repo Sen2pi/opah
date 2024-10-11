@@ -31,9 +31,11 @@ router.delete("/balancete/:id", balanceteController.deleteBalancete);
 // Rotas para Módulos
 router.get("/modulos", modulosController.getModulos);
 router.get("/modulos/:id", modulosController.getModuloById);
+router.get("/modulos/professor/:id", modulosController.getModulosByProfessorId);
 router.post("/modulos", modulosController.createModulo);
 router.put("/modulos/:id", modulosController.updateModulo);
 router.delete("/modulos/:id", modulosController.deleteModulo);
+
 
 // Rotas para Relatórios
 router.get("/relatorios", relatoriosController.getRelatorios);
@@ -63,6 +65,8 @@ router.post("/aulas", aulasController.createAula);
 router.put("/aulas/:id", aulasController.updateAula);
 router.delete("/aulas/:id", aulasController.deleteAula);
 router.get("/futuras", aulasController.getAulasFuturas);
+router.get("/aulas/professor/:id", aulasController.getAulasByProfessorId);
+router.get("/aulas/modulo/:id", aulasController.getAulasByModuloId);
 
 // Rotas para Professores
 router.get("/professores", professoresController.getProfessores);
@@ -70,6 +74,10 @@ router.get("/professores/:id", professoresController.getProfessorById);
 router.post("/professores", professoresController.createProfessor);
 router.put("/professores/:id", professoresController.updateProfessor);
 router.delete("/professores/:id", professoresController.deleteProfessor);
+router.get("/professor/modulos/:id", professoresController.getModulosByProfessorId);
+router.get("/professor/aulas/:id", professoresController.getAulasByProfessorId);
+router.get("/professorusuario/:id", professoresController.getProfessorFromUsuarioId);
+
 
 // Rotas para Alunos
 router.get("/alunos", alunosController.getAlunos);
@@ -77,6 +85,7 @@ router.get("/alunos/:id", alunosController.getAlunoById);
 router.post("/alunos", alunosController.createAluno);
 router.put("/alunos/:id", alunosController.updateAluno);
 router.delete("/alunos/:id", alunosController.deleteAluno);
+router.get("/alunos/aulas/:id", alunosController.getAlunosByAulaId);
 
 // Rotas para Publicações
 router.get("/publicacoes", publicacoesController.getPublicacoes);

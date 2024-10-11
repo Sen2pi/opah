@@ -47,11 +47,54 @@ const deleteProfessor = (req, res) => {
     .then(() => res.json({ message: "Professor deletado com sucesso" }))
     .catch((err) => res.status(500).send(err));
 };
+const getModulosByProfessorId = (req, res) => {
+  const { id } = req.params; // Ensure you use `id` here
+  const sql = `
+    SELECT DISTINCT Modulos.* 
+    FROM Aulas 
+    INNER JOIN Modulos ON Aulas.ModuloId = Modulos.id
+    INNER JOIN Professores ON Aulas.ProfessorId = Professores.id
+    WHERE Professores.UsuarioId = ?`;
+
+  executeWithRetry(sql, [id]) // Pass `id` instead of `UsuarioId`
+    .then((results) => res.json(results))
+    .catch((err) => {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Erro ao buscar módulos", error: err });
+    });
+};
+const getAulasByProfessorId = (req, res) => {
+  const { id } = req.params; // Ensure you use `id` here
+  const sql = `
+    SELECT * 
+    FROM Aulas 
+    INNER JOIN Professores ON Aulas.ProfessorId = Professores.id
+    WHERE Professores.UsuarioId = ?`;
+  executeWithRetry(sql, [id]) // Pass `id` instead of `UsuarioId`
+    .then((results) => res.json(results))
+    .catch((err) => {
+      console.error("Database error:", err);
+      res.status(500).json({ message: "Erro ao buscar módulos", error: err });
+    });
+};
+const getProfessorFromUsuarioId = (req, res) => {
+  const { id } = req.params;
+  const sql = "SELECT * FROM Professores WHERE UsuarioId = ?";
+  executeWithRetry(sql, [id])
+  .then((results) => res.json(results))
+  .catch((err) => {
+    console.error("Database error:", err);
+    res.status(500).json({ message: "Erro ao buscar Professor", error: err });
+  });
+};
 module.exports = {
+  getModulosByProfessorId,
+  getAulasByProfessorId,
   deleteProfessor,
   updateProfessor,
   createProfessor,
   getProfessorById,
+  getProfessorFromUsuarioId,
   getProfessores,
   // outras funções do controlador...
 };

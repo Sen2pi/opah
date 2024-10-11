@@ -14,7 +14,7 @@ app.use(helmet());
 
 app.use(cors({
     origin: 'http://localhost:3000', // Allow requests from your frontend
-    methods: ['GET', 'POST', 'PUT'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: false
 }));
 app.use(express.json());
