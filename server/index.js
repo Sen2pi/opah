@@ -10,23 +10,20 @@ const app = express();
 
 // Middlewares
 app.use(helmet());
-
-
 app.use(cors({
-    origin: 'http://localhost:3000', // Allow requests from your frontend
+    origin: 'https://opah.pt',
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
     credentials: false
 }));
 app.use(express.json());
 
-// Serve static files from the uploads directory
-app.use('client/src/assets', express.static(path.join(__dirname, 'assets')));
-
+// Serve static files from the assets directory
+app.use('/assets', express.static(path.join(__dirname, 'assets')));
 
 // Configure multer for file storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'client/src/assets'); // Ensure this path is correct
+        cb(null, path.join(__dirname, 'assets')); // Adjusted to absolute path
     },
     filename: (req, file, cb) => {
         const ext = path.extname(file.originalname);
@@ -48,10 +45,16 @@ app.post('/upload', upload.single('file'), (req, res) => {
 });
 
 // Routes
-app.use('/auth', authRoutes); // Authentication routes
-app.use('/api', allRoutes); // All resource routes
+app.use('/auth', authRoutes);
+app.use('/', allRoutes);
 
-const PORT = 5000;
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
+});
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });
